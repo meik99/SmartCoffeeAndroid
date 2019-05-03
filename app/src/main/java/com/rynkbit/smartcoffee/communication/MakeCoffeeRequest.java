@@ -2,6 +2,7 @@ package com.rynkbit.smartcoffee.communication;
 
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 public class MakeCoffeeRequest {
 
     private static final String REQUEST_URL = "http://192.168.178.24:5000/coffee";
+    private static final int TIMEOUT = 20_000;
 
     private MakeCoffeeListener listener;
 
@@ -40,6 +42,11 @@ public class MakeCoffeeRequest {
                     }
                 }
         );
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                TIMEOUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
         queue.add(request);
         queue.start();
     }
