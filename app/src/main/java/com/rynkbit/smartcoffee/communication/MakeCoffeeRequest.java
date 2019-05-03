@@ -47,8 +47,8 @@ public class MakeCoffeeRequest {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        queue.add(request);
         queue.start();
+        queue.add(request);
     }
 
     public void setListener(MakeCoffeeListener listener){
