@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">SmartCoffee</string>
     <string name="action_settings">Settings</string>
+    <string name="make_coffee">Make Coffee</string>
+    <string name="time">Time:</string>
+    <string name="alarm_name_placeholder">Alarm Name Placeholder</string>
+    <string name="_06_00">06:00</string>
 </resources>
