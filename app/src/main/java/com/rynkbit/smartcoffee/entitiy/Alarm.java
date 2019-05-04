@@ -3,18 +3,20 @@ package com.rynkbit.smartcoffee.entitiy;
 import java.util.Date;
 
 public class Alarm {
+    public static final String DATE_PATTERN = "y-M-d H:m:s.S";
+
     private int id;
     private int hour;
     private int minute;
     private String name;
-    private Date last_activated;
+    private Date lastActivated;
 
     public Alarm(int id, int hour, int minute, String name, Date last_activated) {
         this.id = id;
         this.hour = hour;
         this.minute = minute;
         this.name = name;
-        this.last_activated = last_activated;
+        this.lastActivated = last_activated;
     }
 
     public Alarm() {
@@ -53,11 +55,11 @@ public class Alarm {
         this.name = name;
     }
 
-    public Date getLast_activated() {
-        return last_activated;
+    public Date getLastActivated() {
+        return lastActivated;
     }
 
-    public void setLast_activated(Date last_activated) {
-        this.last_activated = last_activated;
+    public void setLastActivated(Date lastActivated) {
+        this.lastActivated = lastActivated;
     }
 }

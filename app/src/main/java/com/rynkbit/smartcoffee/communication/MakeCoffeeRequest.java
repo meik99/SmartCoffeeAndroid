@@ -14,7 +14,8 @@ import org.json.JSONObject;
 
 public class MakeCoffeeRequest {
 
-    private static final String REQUEST_URL = "http://192.168.178.24:5000/coffee";
+    private static final String REQUEST_URL =
+            CoffeeRequestConstants.REQUEST_URL + CoffeeRequestConstants.COFFEE_ENDPOINT;
     private static final int TIMEOUT = 20_000;
 
     private MakeCoffeeListener listener;

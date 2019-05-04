@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,13 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rynkbit.smartcoffee.alarm.AlarmListAdapter;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class MainFragment extends Fragment {
 
     private MainViewModel mViewModel;
+    private AlarmListAdapter mAlarmListAdapter;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -38,26 +39,23 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
         Button btnMakeCoffee = Objects.requireNonNull(getView()).findViewById(R.id.btnMakeCoffee);
         RecyclerView listAlarm = Objects.requireNonNull(getView()).findViewById(R.id.listAlarms);
+        mAlarmListAdapter = new AlarmListAdapter();
 
         listAlarm.setLayoutManager(new LinearLayoutManager(getContext()));
-        listAlarm.setAdapter(new AlarmListAdapter(new ArrayList<Alarm>(){{
-            add(new Alarm(1, 6, 5, "Alarm 1", new Date()));
-            add(new Alarm(2, 7, 15, "Alarm 2", new Date()));
-            add(new Alarm(3, 8, 25, "Alarm 3", new Date()));
-            add(new Alarm(4, 9, 35, "Alarm 4", new Date()));
-            add(new Alarm(1, 6, 5, "Alarm 1", new Date()));
-            add(new Alarm(2, 7, 15, "Alarm 2", new Date()));
-            add(new Alarm(3, 8, 25, "Alarm 3", new Date()));
-            add(new Alarm(4, 9, 35, "Alarm 4", new Date()));
-        }}));
+        listAlarm.setAdapter(mAlarmListAdapter);
+
+        mViewModel.getAlarms().observe(
+                this,
+                new Observer<List<Alarm>>() {
+                    @Override
+                    public void onChanged(List<Alarm> alarmList) {
+                        mAlarmListAdapter.setAlarmList(alarmList);
+                    }
+                }
+        );
 
         btnMakeCoffee.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,5 +63,12 @@ public class MainFragment extends Fragment {
                 mViewModel.sendCoffeeRequest(getContext());
             }
         });
+
+        mViewModel.sendGetAlarmsRequest(getContext());
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 }

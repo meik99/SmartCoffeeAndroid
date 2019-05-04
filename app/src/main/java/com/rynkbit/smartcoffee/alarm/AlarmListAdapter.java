@@ -53,6 +53,11 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
         return mAlarmList.size();
     }
 
+    public void setAlarmList(List<Alarm> alarmList) {
+        this.mAlarmList = alarmList;
+        this.notifyDataSetChanged();
+    }
+
     public class AlarmListViewHolder extends RecyclerView.ViewHolder{
         TextView txtAlarmName;
         TextView txtAlarmTime;
