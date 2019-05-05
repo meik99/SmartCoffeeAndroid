@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.rynkbit.smartcoffee.entitiy.Alarm;
+
 import java.util.Locale;
 import java.util.Objects;
 
@@ -36,6 +38,10 @@ public class EditAlarmFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EditAlarmViewModel.class);
+        final SharedAlarmViewModel sharedAlarmViewModel =
+                ViewModelProviders.of(getActivity()).get(SharedAlarmViewModel.class);
+
+        mViewModel.setAlarm(sharedAlarmViewModel.getSharedAlarm());
 
         final EditText txtAlarmName = Objects.requireNonNull(getView()).findViewById(R.id.txtAlarmName);
         final EditText txtAlarmTime = Objects.requireNonNull(getView()).findViewById(R.id.txtAlarmTime);
@@ -48,9 +54,7 @@ public class EditAlarmFragment extends Fragment {
                 timeDialogFragment.setTimeSetListener(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        txtAlarmTime.setText(String.format(Locale.getDefault(),
-                                "%02d:%02d", hourOfDay, minute));
-                        mViewModel.setTime(hourOfDay, minute);
+                       setTime(txtAlarmTime, hourOfDay, minute);
                     }
                 });
                 timeDialogFragment.show();
@@ -67,6 +71,19 @@ public class EditAlarmFragment extends Fragment {
                         .popBackStack();
             }
         });
+
+        if(mViewModel.getAlarm().getId() > 0){
+            Alarm alarm = mViewModel.getAlarm();
+
+            txtAlarmName.setText(alarm.getName());
+            setTime(txtAlarmTime, alarm.getHour(), alarm.getMinute());
+        }
+    }
+
+    private void setTime(EditText txtAlarmTime, int hourOfDay, int minute){
+        txtAlarmTime.setText(String.format(Locale.getDefault(),
+                "%02d:%02d", hourOfDay, minute));
+        mViewModel.setTime(hourOfDay, minute);
     }
 
 }

@@ -23,10 +23,10 @@ public class PostAlarmRequest {
     }
 
 
-    public void sendPostAlarmsRequest(Context context, Alarm alarm){
+    public void sendPostAlarmsRequest(Context context, Alarm alarm, boolean isUpdate){
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(
-                Request.Method.POST,
+                isUpdate == false ? Request.Method.POST : Request.Method.PUT,
                 CoffeeRequestConstants.REQUEST_URL + CoffeeRequestConstants.ALARM_ENDPOINT,
                 new JsonAlarmConverter().convertAlarmToObject(alarm),
                 new Response.Listener<JSONObject>() {

@@ -24,6 +24,10 @@ public class EditAlarmViewModel extends ViewModel {
     }
 
     public void saveAlarm(Context context){
-        new PostAlarmRequest().sendPostAlarmsRequest(context, mAlarm);
+        new PostAlarmRequest().sendPostAlarmsRequest(context, mAlarm, mAlarm.getId() > 0);
+    }
+
+    public Alarm getAlarm() {
+        return mAlarm;
     }
 }

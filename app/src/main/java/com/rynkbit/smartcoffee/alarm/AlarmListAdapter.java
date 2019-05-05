@@ -17,6 +17,11 @@ import java.util.Locale;
 
 public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.AlarmListViewHolder> {
     private List<Alarm> mAlarmList;
+    private AlarmListListener mListener;
+
+    public void setListener(AlarmListListener listener) {
+        this.mListener = listener;
+    }
 
     public AlarmListAdapter(List<Alarm> alarmList){
         this.mAlarmList = alarmList;
@@ -37,7 +42,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
 
     @Override
     public void onBindViewHolder(@NonNull AlarmListViewHolder holder, int position) {
-        Alarm alarm = mAlarmList.get(position);
+        final Alarm alarm = mAlarmList.get(position);
         holder.txtAlarmName.setText(alarm.getName());
         holder.txtAlarmTime.setText(
                 String.format(
@@ -46,6 +51,23 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                         alarm.getHour(),
                         alarm.getMinute())
         );
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mListener != null){
+                    mListener.onClick(alarm);
+                }
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(mListener != null){
+                    mListener.onLongClick(alarm);
+                }
+                return false;
+            }
+        });
     }
 
     @Override

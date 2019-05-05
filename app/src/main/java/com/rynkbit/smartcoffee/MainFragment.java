@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rynkbit.smartcoffee.alarm.AlarmListAdapter;
+import com.rynkbit.smartcoffee.alarm.AlarmListListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         final SharedAlarmViewModel sharedAlarmViewModel =
-                ViewModelProviders.of(this).get(SharedAlarmViewModel.class);
+                ViewModelProviders.of(getActivity()).get(SharedAlarmViewModel.class);
 
         Button btnMakeCoffee = Objects.requireNonNull(getView()).findViewById(R.id.btnMakeCoffee);
         RecyclerView listAlarm = Objects.requireNonNull(getView()).findViewById(R.id.listAlarms);
@@ -81,6 +82,19 @@ public class MainFragment extends Fragment {
             }
         });
 
+        mAlarmListAdapter.setListener(new AlarmListListener() {
+            @Override
+            public void onClick(Alarm alarm) {
+                sharedAlarmViewModel.setSharedAlarm(alarm);
+                NavHostFragment.findNavController(MainFragment.this)
+                        .navigate(R.id.action_mainFragment_to_editAlarmFragment);
+            }
+
+            @Override
+            public void onLongClick(Alarm alarm) {
+
+            }
+        });
 
         mViewModel.sendGetAlarmsRequest(getContext());
     }
