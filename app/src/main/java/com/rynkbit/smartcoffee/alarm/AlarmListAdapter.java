@@ -65,7 +65,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.Alar
                 if(mListener != null){
                     mListener.onLongClick(alarm);
                 }
-                return false;
+                return true;
             }
         });
     }

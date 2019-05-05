@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.volley.VolleyError;
+import com.rynkbit.smartcoffee.communication.DeleteAlarmRequest;
+import com.rynkbit.smartcoffee.communication.DeleteAlarmRequestListener;
 import com.rynkbit.smartcoffee.communication.GetAlarmRequestListener;
 import com.rynkbit.smartcoffee.communication.GetAlarmsRequest;
 import com.rynkbit.smartcoffee.communication.MakeCoffeeRequest;
@@ -36,9 +38,27 @@ public class MainViewModel extends ViewModel {
 
             @Override
             public void onError(VolleyError error) {
-
+                error.printStackTrace();
             }
         });
         request.sendGetAlarmsRequest(context);
+    }
+
+    public void sendDeleteAlarmRequest(final Context context, Alarm alarm) {
+        DeleteAlarmRequest request = new DeleteAlarmRequest();
+        request.setListener(new DeleteAlarmRequestListener() {
+            @Override
+            public void onResponse(String response) {
+                sendGetAlarmsRequest(context);
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                error.printStackTrace();
+                sendGetAlarmsRequest(context);
+
+            }
+        });
+        request.sendDeleteAlarmsRequest(context, alarm);
     }
 }

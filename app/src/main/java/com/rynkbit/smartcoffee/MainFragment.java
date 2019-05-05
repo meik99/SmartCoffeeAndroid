@@ -92,7 +92,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onLongClick(Alarm alarm) {
-
+                mViewModel.sendDeleteAlarmRequest(getContext(), alarm);
             }
         });
 

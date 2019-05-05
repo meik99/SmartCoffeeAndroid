@@ -30,7 +30,7 @@ public class Alarm implements Parcelable {
     }
 
     public Alarm() {
-        this(0, -1, -1, "Alarm", new Date());
+        this(0, 6, 0, "Alarm", new Date());
     }
 
     protected Alarm(Parcel in) {
