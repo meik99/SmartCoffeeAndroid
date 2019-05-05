@@ -1,9 +1,19 @@
 package com.rynkbit.smartcoffee.entitiy;
 
-import java.util.Date;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Alarm {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class Alarm implements Parcelable {
     public static final String DATE_PATTERN = "y-M-d H:m:s.S";
+
+    private SimpleDateFormat alarmDateFormat = new SimpleDateFormat(
+            DATE_PATTERN, Locale.getDefault()
+    );
 
     private int id;
     private int hour;
@@ -22,6 +32,30 @@ public class Alarm {
     public Alarm() {
         this(0, -1, -1, "Alarm", new Date());
     }
+
+    protected Alarm(Parcel in) {
+        id = in.readInt();
+        hour = in.readInt();
+        minute = in.readInt();
+        name = in.readString();
+        try {
+            lastActivated = alarmDateFormat.parse(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static final Creator<Alarm> CREATOR = new Creator<Alarm>() {
+        @Override
+        public Alarm createFromParcel(Parcel in) {
+            return new Alarm(in);
+        }
+
+        @Override
+        public Alarm[] newArray(int size) {
+            return new Alarm[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -60,6 +94,24 @@ public class Alarm {
     }
 
     public void setLastActivated(Date lastActivated) {
+        if(lastActivated == null){
+            throw new NullPointerException("lastActivated must not be null");
+        }
+
         this.lastActivated = lastActivated;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(hour);
+        dest.writeInt(minute);
+        dest.writeString(name);
+        dest.writeString(alarmDateFormat.format(lastActivated));
     }
 }
