@@ -101,6 +101,10 @@ public class Alarm implements Parcelable {
         this.lastActivated = lastActivated;
     }
 
+    public String getLastActivatedAsString(){
+        return alarmDateFormat.format(getLastActivated());
+    }
+
     @Override
     public int describeContents() {
         return 0;

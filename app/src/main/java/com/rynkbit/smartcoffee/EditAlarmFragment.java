@@ -1,14 +1,22 @@
 package com.rynkbit.smartcoffee;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
+
+import java.util.Locale;
+import java.util.Objects;
 
 public class EditAlarmFragment extends Fragment {
 
@@ -28,7 +36,37 @@ public class EditAlarmFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EditAlarmViewModel.class);
-        // TODO: Use the ViewModel
+
+        final EditText txtAlarmName = Objects.requireNonNull(getView()).findViewById(R.id.txtAlarmName);
+        final EditText txtAlarmTime = Objects.requireNonNull(getView()).findViewById(R.id.txtAlarmTime);
+        Button btnSave = Objects.requireNonNull(getView()).findViewById(R.id.btnSave);
+
+        txtAlarmTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimeDialogFragment timeDialogFragment = new TimeDialogFragment(getContext());
+                timeDialogFragment.setTimeSetListener(new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        txtAlarmTime.setText(String.format(Locale.getDefault(),
+                                "%02d:%02d", hourOfDay, minute));
+                        mViewModel.setTime(hourOfDay, minute);
+                    }
+                });
+                timeDialogFragment.show();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.setName(txtAlarmName.getText().toString());
+                mViewModel.saveAlarm(getContext());
+                NavHostFragment
+                        .findNavController(EditAlarmFragment.this)
+                        .popBackStack();
+            }
+        });
     }
 
 }

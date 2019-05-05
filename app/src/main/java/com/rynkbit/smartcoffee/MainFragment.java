@@ -41,19 +41,14 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        final SharedAlarmViewModel sharedAlarmViewModel =
+                ViewModelProviders.of(this).get(SharedAlarmViewModel.class);
 
         Button btnMakeCoffee = Objects.requireNonNull(getView()).findViewById(R.id.btnMakeCoffee);
         RecyclerView listAlarm = Objects.requireNonNull(getView()).findViewById(R.id.listAlarms);
         FloatingActionButton fabAddAlarm = Objects.requireNonNull(
                 getView()).findViewById(R.id.fabAddAlarm);
 
-        fabAddAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(MainFragment.this)
-                        .navigate(R.id.action_mainFragment_to_editAlarmFragment);
-            }
-        });
 
         mAlarmListAdapter = new AlarmListAdapter();
 
@@ -77,11 +72,27 @@ public class MainFragment extends Fragment {
             }
         });
 
+        fabAddAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedAlarmViewModel.setSharedAlarm(new Alarm());
+                NavHostFragment.findNavController(MainFragment.this)
+                        .navigate(R.id.action_mainFragment_to_editAlarmFragment);
+            }
+        });
+
+
         mViewModel.sendGetAlarmsRequest(getContext());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mViewModel.sendGetAlarmsRequest(getContext());
     }
 }

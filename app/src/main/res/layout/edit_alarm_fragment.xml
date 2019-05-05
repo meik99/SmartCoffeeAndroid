@@ -15,23 +15,25 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Alarm Name"
+        android:hint="@string/alarm_name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txtTime"
+        android:id="@+id/txtAlarmTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:clickable="true"
         android:editable="false"
         android:ems="10"
-        android:enabled="false"
-        android:hint="06:00"
+        android:enabled="true"
+        android:focusable="false"
+        android:hint="@string/_06_00"
         android:inputType="time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -43,12 +45,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Time"
+        android:text="@string/time"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTime"
+        app:layout_constraintBottom_toBottomOf="@+id/txtAlarmTime"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTime" />
+        app:layout_constraintTop_toTopOf="@+id/txtAlarmTime" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -65,7 +67,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Save"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

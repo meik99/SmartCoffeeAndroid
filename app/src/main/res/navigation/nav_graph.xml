@@ -20,7 +20,7 @@
         android:label="edit_alarm_fragment"
         tools:layout="@layout/edit_alarm_fragment" >
         <action
-            android:id="@+id/action_editAlarmFragment_to_mainFragment2"
+            android:id="@+id/action_editAlarmFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 </navigation>
