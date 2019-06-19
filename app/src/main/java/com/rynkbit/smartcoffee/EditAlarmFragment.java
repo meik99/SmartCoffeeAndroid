@@ -7,14 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.android.volley.VolleyError;
+import com.google.android.material.snackbar.Snackbar;
+import com.rynkbit.smartcoffee.communication.PostAlarmRequestListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
 import java.util.Locale;
@@ -23,6 +28,8 @@ import java.util.Objects;
 public class EditAlarmFragment extends Fragment {
 
     private EditAlarmViewModel mViewModel;
+    private Button btnSave;
+    private ProgressBar progressBar;
 
     public static EditAlarmFragment newInstance() {
         return new EditAlarmFragment();
@@ -45,7 +52,9 @@ public class EditAlarmFragment extends Fragment {
 
         final EditText txtAlarmName = Objects.requireNonNull(getView()).findViewById(R.id.txtAlarmName);
         final EditText txtAlarmTime = Objects.requireNonNull(getView()).findViewById(R.id.txtAlarmTime);
-        Button btnSave = Objects.requireNonNull(getView()).findViewById(R.id.btnSave);
+
+        btnSave = Objects.requireNonNull(getView()).findViewById(R.id.btnSave);
+        progressBar = Objects.requireNonNull(getView()).findViewById(R.id.progressBar);
 
         txtAlarmTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,11 +73,21 @@ public class EditAlarmFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSave.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+
                 mViewModel.setName(txtAlarmName.getText().toString());
-                mViewModel.saveAlarm(getContext());
-                NavHostFragment
-                        .findNavController(EditAlarmFragment.this)
-                        .popBackStack();
+                mViewModel.saveAlarm(getContext(), new PostAlarmRequestListener() {
+                    @Override
+                    public void onResponse(Alarm alarm) {
+                        exitWithSnackbarMessage(R.string.alarm_saved);
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+                        exitWithSnackbarMessage(R.string.no_connection);
+                    }
+                });
             }
         });
 
@@ -84,6 +103,20 @@ public class EditAlarmFragment extends Fragment {
         txtAlarmTime.setText(String.format(Locale.getDefault(),
                 "%02d:%02d", hourOfDay, minute));
         mViewModel.setTime(hourOfDay, minute);
+    }
+
+    private void exitWithSnackbarMessage(@StringRes int message){
+        btnSave.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        Snackbar.make(
+                Objects.requireNonNull(getView()),
+                message,
+                Snackbar.LENGTH_SHORT)
+                .show();
+        NavHostFragment
+                .findNavController(EditAlarmFragment.this)
+                .popBackStack();
     }
 
 }

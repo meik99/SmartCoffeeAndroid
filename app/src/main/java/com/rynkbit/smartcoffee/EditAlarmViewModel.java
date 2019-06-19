@@ -4,7 +4,10 @@ import android.content.Context;
 
 import androidx.lifecycle.ViewModel;
 
+import com.android.volley.VolleyError;
+import com.google.android.material.snackbar.Snackbar;
 import com.rynkbit.smartcoffee.communication.PostAlarmRequest;
+import com.rynkbit.smartcoffee.communication.PostAlarmRequestListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
 public class EditAlarmViewModel extends ViewModel {
@@ -23,8 +26,11 @@ public class EditAlarmViewModel extends ViewModel {
         this.mAlarm = Alarm;
     }
 
-    public void saveAlarm(Context context){
-        new PostAlarmRequest().sendPostAlarmsRequest(context, mAlarm, mAlarm.getId() > 0);
+    public void saveAlarm(Context context, PostAlarmRequestListener listener){
+        PostAlarmRequest request = new PostAlarmRequest();
+
+        request.setListener(listener);
+        request.sendPostAlarmsRequest(context, mAlarm, mAlarm.getId() > 0);
     }
 
     public Alarm getAlarm() {
