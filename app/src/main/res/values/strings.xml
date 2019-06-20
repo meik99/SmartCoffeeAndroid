@@ -9,4 +9,10 @@
     <string name="save">Save</string>
     <string name="alarm_saved">Alarm Saved</string>
     <string name="no_connection">Could not connect to SmartCoffee server</string>
+    <string name="smartcoffee_ip">SmartCoffee IP</string>
+    <string name="smartcoffee_ip_value">192.168.178.47</string>
+    <string name="smartcoffee_ip_summary">Set the IP of your SmartCoffee coffee maker</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
