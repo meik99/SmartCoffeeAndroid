@@ -1,4 +1,4 @@
-package com.rynkbit.smartcoffee.communication;
+package com.rynkbit.smartcoffee.communication.request;
 
 import android.content.Context;
 
@@ -8,11 +8,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.rynkbit.smartcoffee.communication.CoffeeRequestConstants;
+import com.rynkbit.smartcoffee.communication.JsonAlarmConverter;
+import com.rynkbit.smartcoffee.communication.listener.GetAlarmRequestListener;
 
 import org.json.JSONArray;
 
-public class GetAlarmsRequest {
+public class GetAlarmsRequest extends BaseRequest {
     private GetAlarmRequestListener mListener;
+
+    public GetAlarmsRequest(Context context) {
+        super(context);
+    }
 
     public void setListener(GetAlarmRequestListener listener){
         this.mListener = listener;
@@ -23,7 +30,7 @@ public class GetAlarmsRequest {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                CoffeeRequestConstants.REQUEST_URL + CoffeeRequestConstants.ALARM_ENDPOINT,
+                getRequestUrl() + CoffeeRequestConstants.ALARM_ENDPOINT,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override

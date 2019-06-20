@@ -15,10 +15,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.VolleyError;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.rynkbit.smartcoffee.alarm.AlarmListAdapter;
 import com.rynkbit.smartcoffee.alarm.AlarmListListener;
+import com.rynkbit.smartcoffee.communication.listener.MakeCoffeeListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
+
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Objects;
@@ -69,7 +74,25 @@ public class MainFragment extends Fragment {
         btnMakeCoffee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mViewModel.sendCoffeeRequest(getContext());
+                mViewModel.sendCoffeeRequest(getContext(), new MakeCoffeeListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Snackbar.make(
+                                Objects.requireNonNull(getView()),
+                                getString(R.string.makeing_coffee),
+                                Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+                        Snackbar.make(
+                                Objects.requireNonNull(getView()),
+                                getString(R.string.failed_making_coffee),
+                                Snackbar.LENGTH_SHORT)
+                                .show();
+                    }
+                });
             }
         });
 

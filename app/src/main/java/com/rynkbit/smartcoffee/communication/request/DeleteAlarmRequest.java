@@ -1,4 +1,4 @@
-package com.rynkbit.smartcoffee.communication;
+package com.rynkbit.smartcoffee.communication.request;
 
 import android.content.Context;
 
@@ -8,10 +8,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.rynkbit.smartcoffee.communication.CoffeeRequestConstants;
+import com.rynkbit.smartcoffee.communication.listener.DeleteAlarmRequestListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
-public class DeleteAlarmRequest {
+public class DeleteAlarmRequest extends BaseRequest{
     private DeleteAlarmRequestListener mListener;
+
+    public DeleteAlarmRequest(Context context) {
+        super(context);
+    }
 
     public void setListener(DeleteAlarmRequestListener listener){
         this.mListener = listener;
@@ -22,7 +28,7 @@ public class DeleteAlarmRequest {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(
                 Request.Method.DELETE,
-                CoffeeRequestConstants.REQUEST_URL +
+                getRequestUrl() +
                         CoffeeRequestConstants.ALARM_ENDPOINT + "?id=" + alarm.getId(),
                 new Response.Listener<String>() {
                     @Override

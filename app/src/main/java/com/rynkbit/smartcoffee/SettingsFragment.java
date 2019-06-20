@@ -1,20 +1,25 @@
 package com.rynkbit.smartcoffee;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceFragmentCompat;
-
-import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.preference.PreferenceFragmentCompat;
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+import com.android.volley.VolleyError;
+import com.google.android.material.snackbar.Snackbar;
+import com.rynkbit.smartcoffee.communication.listener.GetAlarmRequestListener;
+import com.rynkbit.smartcoffee.communication.request.GetAlarmsRequest;
+import com.rynkbit.smartcoffee.entitiy.Alarm;
+
+import java.util.List;
+import java.util.Objects;
+
+
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     public SettingsFragment() {
@@ -31,13 +36,52 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
-
-//        return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceManager()
+                .getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceManager()
+                .getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        GetAlarmsRequest request = new GetAlarmsRequest(getContext());
+
+        request.setListener(new GetAlarmRequestListener() {
+            @Override
+            public void onResponse(List<Alarm> alarms) {
+                Snackbar.make(
+                        Objects.requireNonNull(getView()),
+                        "Successfully connected to SmartCoffee coffee maker",
+                        Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                Snackbar.make(
+                        Objects.requireNonNull(getView()),
+                        "Could not connect to SmartCoffee coffee maker",
+                        Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        request.sendGetAlarmsRequest(getContext());
 
     }
 }

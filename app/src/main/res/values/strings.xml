@@ -15,4 +15,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="alarm_deleted">Alarm deleted</string>
+    <string name="alarm_error_deleted">Failed to delete alarm</string>
+    <string name="makeing_coffee">Making coffee</string>
+    <string name="failed_making_coffee">Failed to make coffee</string>
 </resources>

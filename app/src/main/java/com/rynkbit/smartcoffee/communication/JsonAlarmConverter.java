@@ -8,34 +8,19 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 public class JsonAlarmConverter {
-    public Alarm convertObjectToAlarm(JSONObject alarmObject) throws JSONException, ParseException {
+    public Alarm convertObjectToAlarm(JSONObject alarmObject) throws JSONException {
         Alarm alarm = new Alarm();
 
         alarm.setId(alarmObject.getInt("id"));
         alarm.setHour(alarmObject.getInt("hour"));
         alarm.setMinute(alarmObject.getInt("minute"));
         alarm.setName(alarmObject.getString("name"));
-        alarm.setLastActivated(
-                new SimpleDateFormat(
-                        Alarm.DATE_PATTERN,
-                        Locale.getDefault())
-                        .parse(
-                                alarmObject.getString("last_activated")
-                                        .substring(
-                                                0,
-                                                alarmObject
-                                                        .getString(
-                                                                "last_activated"
-                                                        )
-                                                        .length() - 3
-                                        )
-                        )
-        );
 
         return alarm;
     }
@@ -52,8 +37,6 @@ public class JsonAlarmConverter {
             } catch (JSONException e) {
                 e.printStackTrace();
                 i = alarmArray.length();
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
 

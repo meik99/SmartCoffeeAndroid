@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.android.volley.VolleyError;
+import com.rynkbit.smartcoffee.communication.request.GetAlarmsRequest;
+import com.rynkbit.smartcoffee.communication.listener.GetAlarmRequestListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
 import org.junit.Before;
@@ -35,7 +37,7 @@ public class GetAlarmsRequestTests {
     public void testGetAlarms(){
         final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        GetAlarmsRequest alarmsRequest = new GetAlarmsRequest();
+        GetAlarmsRequest alarmsRequest = new GetAlarmsRequest(mContext);
         alarmsRequest.setListener(new GetAlarmRequestListener() {
             @Override
             public void onResponse(List<Alarm> alarms) {

@@ -1,17 +1,20 @@
 package com.rynkbit.smartcoffee;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.volley.VolleyError;
-import com.rynkbit.smartcoffee.communication.DeleteAlarmRequest;
-import com.rynkbit.smartcoffee.communication.DeleteAlarmRequestListener;
-import com.rynkbit.smartcoffee.communication.GetAlarmRequestListener;
-import com.rynkbit.smartcoffee.communication.GetAlarmsRequest;
-import com.rynkbit.smartcoffee.communication.MakeCoffeeRequest;
+import com.google.android.material.snackbar.Snackbar;
+import com.rynkbit.smartcoffee.communication.listener.MakeCoffeeListener;
+import com.rynkbit.smartcoffee.communication.request.DeleteAlarmRequest;
+import com.rynkbit.smartcoffee.communication.listener.DeleteAlarmRequestListener;
+import com.rynkbit.smartcoffee.communication.listener.GetAlarmRequestListener;
+import com.rynkbit.smartcoffee.communication.request.GetAlarmsRequest;
+import com.rynkbit.smartcoffee.communication.request.MakeCoffeeRequest;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
 import java.util.List;
@@ -23,13 +26,14 @@ public class MainViewModel extends ViewModel {
         return mAlarms;
     }
 
-    public void sendCoffeeRequest(Context context) {
-        MakeCoffeeRequest coffeeRequest = new MakeCoffeeRequest();
+    public void sendCoffeeRequest(Context context, MakeCoffeeListener listener) {
+        MakeCoffeeRequest coffeeRequest = new MakeCoffeeRequest(context);
+        coffeeRequest.setListener(listener);
         coffeeRequest.sendMakeCoffeeRequest(context);
     }
 
     public void sendGetAlarmsRequest(Context context){
-        GetAlarmsRequest request = new GetAlarmsRequest();
+        GetAlarmsRequest request = new GetAlarmsRequest(context);
         request.setListener(new GetAlarmRequestListener() {
             @Override
             public void onResponse(List<Alarm> alarms) {
@@ -45,18 +49,22 @@ public class MainViewModel extends ViewModel {
     }
 
     public void sendDeleteAlarmRequest(final Context context, Alarm alarm) {
-        DeleteAlarmRequest request = new DeleteAlarmRequest();
+        DeleteAlarmRequest request = new DeleteAlarmRequest(context);
         request.setListener(new DeleteAlarmRequestListener() {
             @Override
             public void onResponse(String response) {
+                Toast.makeText(context, R.string.alarm_deleted, Toast.LENGTH_SHORT)
+                        .show();
                 sendGetAlarmsRequest(context);
             }
 
             @Override
             public void onError(VolleyError error) {
                 error.printStackTrace();
-                sendGetAlarmsRequest(context);
 
+                Toast.makeText(context, R.string.alarm_error_deleted, Toast.LENGTH_SHORT)
+                        .show();
+                sendGetAlarmsRequest(context);
             }
         });
         request.sendDeleteAlarmsRequest(context, alarm);

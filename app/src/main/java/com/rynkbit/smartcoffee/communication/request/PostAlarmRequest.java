@@ -1,4 +1,4 @@
-package com.rynkbit.smartcoffee.communication;
+package com.rynkbit.smartcoffee.communication.request;
 
 import android.content.Context;
 
@@ -8,6 +8,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.rynkbit.smartcoffee.communication.CoffeeRequestConstants;
+import com.rynkbit.smartcoffee.communication.JsonAlarmConverter;
+import com.rynkbit.smartcoffee.communication.listener.PostAlarmRequestListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
 import org.json.JSONException;
@@ -15,8 +18,12 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 
-public class PostAlarmRequest {
+public class PostAlarmRequest extends BaseRequest{
     private PostAlarmRequestListener mListener;
+
+    public PostAlarmRequest(Context context) {
+        super(context);
+    }
 
     public void setListener(PostAlarmRequestListener listener){
         this.mListener = listener;
@@ -27,7 +34,7 @@ public class PostAlarmRequest {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(
                 isUpdate == false ? Request.Method.POST : Request.Method.PUT,
-                CoffeeRequestConstants.REQUEST_URL + CoffeeRequestConstants.ALARM_ENDPOINT,
+                getRequestUrl() + CoffeeRequestConstants.ALARM_ENDPOINT,
                 new JsonAlarmConverter().convertAlarmToObject(alarm),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -39,8 +46,6 @@ public class PostAlarmRequest {
                                                 new JsonAlarmConverter().convertObjectToAlarm(response)
                                         );
                             } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         }

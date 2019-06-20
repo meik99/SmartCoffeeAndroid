@@ -1,4 +1,4 @@
-package com.rynkbit.smartcoffee.communication;
+package com.rynkbit.smartcoffee.communication.request;
 
 import android.content.Context;
 
@@ -9,22 +9,25 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.rynkbit.smartcoffee.communication.CoffeeRequestConstants;
+import com.rynkbit.smartcoffee.communication.listener.MakeCoffeeListener;
 
 import org.json.JSONObject;
 
-public class MakeCoffeeRequest {
-
-    private static final String REQUEST_URL =
-            CoffeeRequestConstants.REQUEST_URL + CoffeeRequestConstants.COFFEE_ENDPOINT;
+public class MakeCoffeeRequest extends BaseRequest{
     private static final int TIMEOUT = 20_000;
 
     private MakeCoffeeListener listener;
+
+    public MakeCoffeeRequest(Context context) {
+        super(context);
+    }
 
     public void sendMakeCoffeeRequest(Context context) {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                REQUEST_URL,
+                getRequestUrl() + CoffeeRequestConstants.COFFEE_ENDPOINT,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override

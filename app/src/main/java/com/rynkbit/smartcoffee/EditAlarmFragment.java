@@ -19,7 +19,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
-import com.rynkbit.smartcoffee.communication.PostAlarmRequestListener;
+import com.rynkbit.smartcoffee.communication.listener.PostAlarmRequestListener;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
 
 import java.util.Locale;

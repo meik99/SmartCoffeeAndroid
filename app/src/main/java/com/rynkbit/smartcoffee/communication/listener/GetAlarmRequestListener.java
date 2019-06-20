@@ -1,4 +1,4 @@
-package com.rynkbit.smartcoffee.communication;
+package com.rynkbit.smartcoffee.communication.listener;
 
 import com.android.volley.VolleyError;
 import com.rynkbit.smartcoffee.entitiy.Alarm;
