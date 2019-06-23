@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceFragmentCompat;
@@ -66,18 +67,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         request.setListener(new GetAlarmRequestListener() {
             @Override
             public void onResponse(List<Alarm> alarms) {
-                Snackbar.make(
-                        Objects.requireNonNull(getView()),
+                Toast.makeText(
+                        getContext(),
                         "Successfully connected to SmartCoffee coffee maker",
-                        Snackbar.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(VolleyError error) {
-                Snackbar.make(
-                        Objects.requireNonNull(getView()),
+                Toast.makeText(
+                        getContext(),
                         "Could not connect to SmartCoffee coffee maker",
-                        Snackbar.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
             }
         });
 

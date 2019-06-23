@@ -19,7 +19,7 @@ public abstract class BaseRequest {
             String.format(Locale.getDefault(), "%s%s:%s",
                     getProtocol(),
                     preferences.getString(
-                            context.getString(R.string.smartcoffee_ip),
+                            context.getString(R.string.smartcoffee_ip_key),
                             context.getString(R.string.smartcoffee_ip_value)
                     ),
                     getPort()
